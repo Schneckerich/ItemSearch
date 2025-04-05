@@ -1,0 +1,10 @@
+{
+    "itemsearch": {
+        "settings": {
+            "name": "ItemSearch",
+            "enabled": {
+                "name": "Enabled"
+            }
+        }
+    }
+}
