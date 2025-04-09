@@ -27,7 +27,7 @@ labyMod {
         displayName = "ItemSearch"
         author = "Schneckt"
         description = "Allows you to search faster for items by highlighting them in your inventory, chests and other containers."
-        minecraftVersion = "1.21.3,1.21.4,1.21.5"
+        minecraftVersion = "1.21.3<1.21.5"
         version = rootProject.version.toString()
     }
 }
