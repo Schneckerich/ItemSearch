@@ -1,12 +1,8 @@
-package de.schneckt.itemsearch.v1_21_4.widget;
+package de.schneckt.itemsearch.v1_21_4.widgets;
 
-import de.schneckt.itemsearch.ItemSearch;
 import net.labymod.api.Laby;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,6 +25,4 @@ public class SearchWidget extends EditBox {
 
         return itemName.contains(searchString.toLowerCase()) || itemDisplayName.contains(searchString.toLowerCase());
     }
-
-
 }

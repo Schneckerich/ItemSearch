@@ -1,0 +1,19 @@
+{
+    "itemsearch": {
+        "settings": {
+            "name": "ItemSearch",
+            "enabled": {
+                "name": "Aktiviert"
+            },
+            "matchColor": {
+                "name": "Übereinstimmungsfarbe"
+            },
+            "mismatchColor": {
+                "name": "Inkongruenzsfarbe"
+            }
+        },
+        "searchWidget": {
+            "boxHint": "Suche Item..."
+        }
+    }
+}

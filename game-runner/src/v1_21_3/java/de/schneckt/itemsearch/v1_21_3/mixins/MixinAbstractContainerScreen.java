@@ -1,23 +1,16 @@
-package de.schneckt.itemsearch.v1_21_4.mixins;
+package de.schneckt.itemsearch.v1_21_3.mixins;
 
 import de.schneckt.itemsearch.ItemSearch;
-import de.schneckt.itemsearch.v1_21_4.widget.SearchWidget;
-import net.labymod.api.Laby;
-import net.minecraft.ChatFormatting;
+import de.schneckt.itemsearch.v1_21_3.widgets.SearchWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen.ItemPickerMenu;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.RecipeBookMenu;
 import net.minecraft.world.inventory.Slot;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen extends Screen {
 
-    private SearchWidget searchWidget;
+    protected SearchWidget searchWidget;
 
     @Shadow
     protected int leftPos;
@@ -63,15 +56,17 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         this.addWidget(this.searchWidget);
     }
 
-    @Inject(method = "render", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("RETURN"))
     private void mixinRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
+
         this.searchWidget.render(guiGraphics, mouseX, mouseY, delta);
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
+
         if (!this.searchWidget.isFocused()) return;
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
             this.setFocused(null);
@@ -82,8 +77,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     }
 
     // exit search box when clicking outside
-    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "mouseClicked", at = @At("HEAD"))
     private void mixinMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+        if (!ItemSearch.getInstance().configuration().enabled().get()) return;
+
         if (this.searchWidget.mouseClicked(mouseX, mouseY, button)) {
             if (!this.searchWidget.isFocused()) this.searchWidget.setFocused(true);
             return;

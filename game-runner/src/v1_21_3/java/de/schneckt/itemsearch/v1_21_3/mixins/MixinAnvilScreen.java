@@ -1,6 +1,6 @@
-package de.schneckt.itemsearch.v1_21_5.mixins;
+package de.schneckt.itemsearch.v1_21_3.mixins;
 
-import net.labymod.api.Laby;
+import de.schneckt.itemsearch.ItemSearch;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.network.chat.Component;
@@ -22,6 +22,8 @@ public abstract class MixinAnvilScreen extends MixinAbstractContainerScreen {
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        if (!ItemSearch.getInstance().configuration().enabled().get()) return;
+
         if (super.searchWidget.isFocused()) {
             cir.setReturnValue(super.keyPressed(keyCode, scanCode, modifiers));
         }

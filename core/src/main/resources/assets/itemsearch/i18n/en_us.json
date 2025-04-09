@@ -4,7 +4,16 @@
             "name": "ItemSearch",
             "enabled": {
                 "name": "Enabled"
+            },
+            "matchColor": {
+                "name": "Match color"
+            },
+            "mismatchColor": {
+                "name": "Mismatch color"
             }
+        },
+        "searchWidget": {
+            "boxHint": "Search item..."
         }
     }
 }
