@@ -21,8 +21,9 @@ public class SearchWidget extends EditBox {
 
     public boolean matchesSearch(ItemStack itemStack) {
         String itemIDstring = itemStack.getItem().toString();
-        String itemDisplayName = itemStack.getDisplayName().getString().toLowerCase();
+        if (itemIDstring.equalsIgnoreCase("minecraft:air")) return false;
 
+        String itemDisplayName = itemStack.getDisplayName().getString().toLowerCase();
         return itemIDstring.contains(searchString.toLowerCase()) || itemDisplayName.contains(searchString.toLowerCase());
     }
 }

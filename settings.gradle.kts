@@ -1,4 +1,4 @@
-rootProject.name = "ItemSearch"
+rootProject.name = "itemsearch"
 
 pluginManagement {
     val labyGradlePluginVersion = "0.5.8"
