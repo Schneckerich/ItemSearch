@@ -20,9 +20,9 @@ public class SearchWidget extends EditBox {
     }
 
     public boolean matchesSearch(ItemStack itemStack) {
-        String itemName = itemStack.getItem().getName().getString().toLowerCase();
+        String itemIDstring = itemStack.getItem().toString();
         String itemDisplayName = itemStack.getDisplayName().getString().toLowerCase();
 
-        return itemName.contains(searchString.toLowerCase()) || itemDisplayName.contains(searchString.toLowerCase());
+        return itemIDstring.contains(searchString.toLowerCase()) || itemDisplayName.contains(searchString.toLowerCase());
     }
 }
