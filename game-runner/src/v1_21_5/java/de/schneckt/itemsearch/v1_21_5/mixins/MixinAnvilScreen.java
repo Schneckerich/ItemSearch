@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AnvilScreen.class)
 public abstract class MixinAnvilScreen extends MixinAbstractContainerScreen {
 
-    @Shadow
-    private EditBox name;
-
     protected MixinAnvilScreen(Component title) {
         super(title);
     }
@@ -24,7 +21,7 @@ public abstract class MixinAnvilScreen extends MixinAbstractContainerScreen {
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (super.searchWidget.isFocused()) {
+        if (super.itemsearch$searchWidget.isFocused()) {
             cir.setReturnValue(super.keyPressed(keyCode, scanCode, modifiers));
         }
     }

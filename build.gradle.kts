@@ -1,3 +1,5 @@
+import net.labymod.labygradle.common.extension.model.labymod.ReleaseChannels
+
 plugins {
     id("net.labymod.labygradle")
     id("net.labymod.labygradle.addon")
@@ -29,6 +31,7 @@ labyMod {
         description = "Allows you to search faster for items by highlighting them in your inventory, chests and other containers."
         minecraftVersion = "1.21.3<1.21.8"
         version = rootProject.version.toString()
+        releaseChannel = ReleaseChannels.SNAPSHOT
     }
 }
 

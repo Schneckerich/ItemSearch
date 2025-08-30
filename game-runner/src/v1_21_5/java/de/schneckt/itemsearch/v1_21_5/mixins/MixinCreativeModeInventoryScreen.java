@@ -12,15 +12,17 @@ import net.minecraft.world.item.CreativeModeTab.Type;
 import net.minecraft.world.item.CreativeModeTabs;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CreativeModeInventoryScreen.class)
-public abstract class MixinCreativeModeInventoryScreen extends AbstractContainerScreen{
+public abstract class MixinCreativeModeInventoryScreen extends AbstractContainerScreen {
 
-    private boolean allowNativeSearchBox = false;
+    @Unique
+    private boolean itemsearch$allowNativeSearchBox = false;
 
     @Shadow
     private static CreativeModeTab selectedTab;
@@ -42,7 +44,7 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
     private void mixinCharTyped(char letter, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.allowNativeSearchBox) {
+        if (!this.itemsearch$allowNativeSearchBox) {
             super.charTyped(letter, modifiers);
             cir.setReturnValue(true);
         }
@@ -54,7 +56,7 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
 
         // no changes needed in other tabs
         if (selectedTab.getType() != Type.SEARCH) {
-            this.allowNativeSearchBox = true;
+            this.itemsearch$allowNativeSearchBox = true;
         }
 
         double posX = mouseX - (double)this.leftPos;
@@ -62,12 +64,12 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
 
         if (this.checkTabClicked(CreativeModeTabs.searchTab(), posX, posY)) return;
 
-        if (this.searchBox.mouseClicked(mouseX, mouseY, button) && !this.allowNativeSearchBox) {
-            this.allowNativeSearchBox = true;
-        } else if (this.allowNativeSearchBox) {
+        if (this.searchBox.mouseClicked(mouseX, mouseY, button) && !this.itemsearch$allowNativeSearchBox) {
+            this.itemsearch$allowNativeSearchBox = true;
+        } else if (this.itemsearch$allowNativeSearchBox) {
             this.searchBox.setCanLoseFocus(true);
             this.searchBox.setFocused(false);
-            this.allowNativeSearchBox = false;
+            this.itemsearch$allowNativeSearchBox = false;
         }
     }
 
@@ -75,7 +77,7 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
     private void selectTab(CreativeModeTab $$0, CallbackInfo ci) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.allowNativeSearchBox) {
+        if (!this.itemsearch$allowNativeSearchBox) {
             this.searchBox.setCanLoseFocus(true);
             this.searchBox.setFocused(false);
         }
@@ -85,7 +87,7 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.allowNativeSearchBox) {
+        if (!this.itemsearch$allowNativeSearchBox) {
             super.keyPressed(keyCode, scanCode, modifiers);
             cir.setReturnValue(true);
         }

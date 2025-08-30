@@ -24,7 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen extends Screen {
 
-    protected SearchWidget searchWidget;
+    @Unique
+    protected SearchWidget itemsearch$searchWidget = SearchWidget.getInstance();
 
     @Shadow
     protected int leftPos;
@@ -52,27 +53,29 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         int offset = 4;
         if (player.containerMenu instanceof ItemPickerMenu) offset = 28;
 
-        this.searchWidget = new SearchWidget(this.leftPos + 1, this.topPos + this.imageHeight + offset);
-        this.addWidget(this.searchWidget);
+        this.itemsearch$searchWidget.setX(this.leftPos + 1);
+        this.itemsearch$searchWidget.setY(this.topPos + this.imageHeight + offset);
+        this.addWidget(this.itemsearch$searchWidget);
+        //this.addRenderableWidget(this.itemsearch$searchWidget);
     }
 
     @Inject(method = "render", at = @At("RETURN"))
     private void mixinRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        this.searchWidget.render(guiGraphics, mouseX, mouseY, delta);
+        this.itemsearch$searchWidget.render(guiGraphics, mouseX, mouseY, delta);
     }
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.searchWidget.isFocused()) return;
+        if (!this.itemsearch$searchWidget.isFocused()) return;
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
             this.setFocused(null);
-            this.searchWidget.setFocused(false);
+            this.itemsearch$searchWidget.setFocused(false);
         }
-        this.searchWidget.keyPressed(keyCode, scanCode, modifiers);
+        this.itemsearch$searchWidget.keyPressed(keyCode, scanCode, modifiers);
         cir.setReturnValue(true);
     }
 
@@ -81,13 +84,12 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private void mixinMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (this.searchWidget.mouseClicked(mouseX, mouseY, button)) {
-            if (!this.searchWidget.isFocused()) this.searchWidget.setFocused(true);
+        if (this.itemsearch$searchWidget.mouseClicked(mouseX, mouseY, button)) {
+            if (!this.itemsearch$searchWidget.isFocused()) this.itemsearch$searchWidget.setFocused(true);
             return;
         }
-        if (this.searchWidget.isFocused()) this.searchWidget.setFocused(false);
+        if (this.itemsearch$searchWidget.isFocused()) this.itemsearch$searchWidget.setFocused(false);
     }
-
 
     // dye the inventory/container slots
     @Inject(method = "renderSlot", at = @At("TAIL"))
@@ -99,7 +101,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         if (SearchWidget.searchString.isEmpty()) return;
         int color;
 
-        if (this.searchWidget.matchesSearch(slot.getItem())) {
+        if (this.itemsearch$searchWidget.matchesSearch(slot.getItem())) {
             color = instance.configuration().getMatchColor().get().get();
         } else {
             color = instance.configuration().getMismatchColor().get().get();

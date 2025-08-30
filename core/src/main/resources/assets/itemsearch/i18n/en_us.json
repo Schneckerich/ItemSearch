@@ -5,11 +5,14 @@
             "enabled": {
                 "name": "Enabled"
             },
+            "useFancyTheme": {
+                "name": "Use Fancy Theme"
+            },
             "matchColor": {
-                "name": "Match color"
+                "name": "Match Color"
             },
             "mismatchColor": {
-                "name": "Mismatch color"
+                "name": "Mismatch Color"
             }
         },
         "searchWidget": {

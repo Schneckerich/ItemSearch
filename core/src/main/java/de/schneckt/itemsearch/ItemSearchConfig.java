@@ -15,14 +15,22 @@ public class ItemSearchConfig extends AddonConfig {
     @SwitchSetting
     private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
 
+    @SwitchSetting
+    private final ConfigProperty<Boolean> useFancyTheme = new ConfigProperty<>(true);
+
     @ColorPickerSetting
     private final ConfigProperty<Color> matchColor = new ConfigProperty<>(Color.WHITE);
 
     @ColorPickerSetting
     private final ConfigProperty<Color> mismatchColor = new ConfigProperty<>(Color.BLACK);
 
+
     @Override
     public ConfigProperty<Boolean> enabled() { return this.enabled; }
+
+    public ConfigProperty<Boolean> getUseFancyTheme() {
+        return useFancyTheme;
+    }
 
     public ConfigProperty<Color> getMatchColor() {
         return matchColor;
@@ -31,4 +39,5 @@ public class ItemSearchConfig extends AddonConfig {
     public ConfigProperty<Color> getMismatchColor() {
         return mismatchColor;
     }
+
 }
