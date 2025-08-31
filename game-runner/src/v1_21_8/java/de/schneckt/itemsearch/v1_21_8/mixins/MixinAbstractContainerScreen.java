@@ -3,6 +3,8 @@ package de.schneckt.itemsearch.v1_21_8.mixins;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import de.schneckt.itemsearch.ItemSearch;
 import de.schneckt.itemsearch.v1_21_8.widgets.SearchWidget;
+import net.labymod.api.Laby;
+import net.labymod.api.client.gui.screen.key.Key;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
@@ -62,8 +64,8 @@ public abstract class MixinAbstractContainerScreen extends Screen {
         //this.addRenderableWidget(this.itemsearch$searchWidget);
     }
 
-    @Inject(method = "render", at = @At("RETURN"))
-    private void mixinRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    @Inject(method = "renderContents", at = @At("RETURN"))
+    private void mixinRenderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
         this.itemsearch$searchWidget.render(guiGraphics, mouseX, mouseY, delta);
@@ -73,9 +75,17 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
+        if (Laby.labyAPI().minecraft().isKeyPressed(Key.F) &&
+            Laby.labyAPI().minecraft().isKeyPressed(Key.L_CONTROL) &&
+            !this.itemsearch$searchWidget.isFocused()
+        ) {
+            this.setFocused(itemsearch$searchWidget);
+            this.itemsearch$searchWidget.setFocused(true);
+            this.itemsearch$searchWidget.setEditable(true);
+        }
+
         if (!this.itemsearch$searchWidget.isFocused()) return;
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
-            this.setFocused(null);
             this.itemsearch$searchWidget.setFocused(false);
         }
         this.itemsearch$searchWidget.keyPressed(keyCode, scanCode, modifiers);

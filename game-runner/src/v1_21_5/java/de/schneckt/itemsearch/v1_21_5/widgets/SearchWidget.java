@@ -9,11 +9,17 @@ import net.labymod.api.client.gui.screen.widget.widgets.input.TextFieldWidget;
 import net.labymod.api.client.render.matrix.VanillaStackAccessor;
 import net.labymod.core.client.gui.screen.key.mapper.DefaultKeyMapper;
 import net.labymod.v1_21_5.client.gui.screen.widget.converter.TextFieldConverter;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import java.util.Objects;
 
 public class SearchWidget extends EditBox {
 
@@ -49,7 +55,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             super.renderWidget(graphics, mouseX, mouseY, partialTicks);
             return;
         }
@@ -67,7 +73,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public boolean charTyped(char c, int param) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             return super.charTyped(c, param);
         }
         Key key = DefaultKeyMapper.lastPressed();
@@ -76,7 +82,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public boolean keyPressed(int keyCode, int param1, int param2) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             return super.keyPressed(keyCode, param1, param2);
         }
         Key key = DefaultKeyMapper.lastPressed();

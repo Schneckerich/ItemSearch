@@ -19,67 +19,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CreativeModeInventoryScreen.class)
-public abstract class MixinCreativeModeInventoryScreen extends AbstractContainerScreen {
+public abstract class MixinCreativeModeInventoryScreen extends MixinAbstractContainerScreen {
 
-    @Unique
-    private boolean itemsearch$allowNativeSearchBox = false;
-
-    @Shadow
-    private static CreativeModeTab selectedTab;
-
-    @Shadow
-    private EditBox searchBox;
-
-    @Shadow
-    protected boolean checkTabClicked(CreativeModeTab $$0, double $$1, double $$2) {
-        return false;
-    }
-
-    public MixinCreativeModeInventoryScreen(AbstractContainerMenu $$0, Inventory $$1,
-        Component $$2) {
-        super($$0, $$1, $$2);
+    protected MixinCreativeModeInventoryScreen(Component title) {
+        super(title);
     }
 
     @Inject(method = "charTyped", at = @At("HEAD"), cancellable = true)
     private void mixinCharTyped(char letter, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.itemsearch$allowNativeSearchBox) {
-            super.charTyped(letter, modifiers);
-            cir.setReturnValue(true);
-        }
-    }
-
-    @Inject(method = "mouseClicked", at = @At("HEAD"))
-    private void mixinMouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (!ItemSearch.getInstance().configuration().enabled().get()) return;
-
-        // no changes needed in other tabs
-        if (selectedTab.getType() != Type.SEARCH) {
-            this.itemsearch$allowNativeSearchBox = true;
-        }
-
-        double posX = mouseX - (double)this.leftPos;
-        double posY = mouseY - (double)this.topPos;
-
-        if (this.checkTabClicked(CreativeModeTabs.searchTab(), posX, posY)) return;
-
-        if (this.searchBox.mouseClicked(mouseX, mouseY, button) && !this.itemsearch$allowNativeSearchBox) {
-            this.itemsearch$allowNativeSearchBox = true;
-        } else if (this.itemsearch$allowNativeSearchBox) {
-            this.searchBox.setCanLoseFocus(true);
-            this.searchBox.setFocused(false);
-            this.itemsearch$allowNativeSearchBox = false;
-        }
-    }
-
-    @Inject(method = "selectTab", at = @At("RETURN"))
-    private void selectTab(CreativeModeTab $$0, CallbackInfo ci) {
-        if (!ItemSearch.getInstance().configuration().enabled().get()) return;
-
-        if (!this.itemsearch$allowNativeSearchBox) {
-            this.searchBox.setCanLoseFocus(true);
-            this.searchBox.setFocused(false);
+        if (super.itemsearch$searchWidget.isFocused()) {
+            cir.setReturnValue(super.charTyped(letter, modifiers));
         }
     }
 
@@ -87,9 +38,8 @@ public abstract class MixinCreativeModeInventoryScreen extends AbstractContainer
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
-        if (!this.itemsearch$allowNativeSearchBox) {
-            super.keyPressed(keyCode, scanCode, modifiers);
-            cir.setReturnValue(true);
+        if (super.itemsearch$searchWidget.isFocused()) {
+            cir.setReturnValue(super.keyPressed(keyCode, scanCode, modifiers));
         }
     }
 }

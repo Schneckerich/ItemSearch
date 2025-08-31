@@ -2,6 +2,8 @@ package de.schneckt.itemsearch.v1_21_5.mixins;
 
 import de.schneckt.itemsearch.ItemSearch;
 import de.schneckt.itemsearch.v1_21_5.widgets.SearchWidget;
+import net.labymod.api.Laby;
+import net.labymod.api.client.gui.screen.key.Key;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -70,9 +72,17 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     private void mixinKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
 
+        if (Laby.labyAPI().minecraft().isKeyPressed(Key.F) &&
+            Laby.labyAPI().minecraft().isKeyPressed(Key.L_CONTROL) &&
+            !this.itemsearch$searchWidget.isFocused()
+        ) {
+            this.setFocused(itemsearch$searchWidget);
+            this.itemsearch$searchWidget.setFocused(true);
+            this.itemsearch$searchWidget.setEditable(true);
+        }
+
         if (!this.itemsearch$searchWidget.isFocused()) return;
         if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
-            this.setFocused(null);
             this.itemsearch$searchWidget.setFocused(false);
         }
         this.itemsearch$searchWidget.keyPressed(keyCode, scanCode, modifiers);

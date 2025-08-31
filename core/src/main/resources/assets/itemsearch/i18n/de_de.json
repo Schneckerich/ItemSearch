@@ -5,9 +5,6 @@
             "enabled": {
                 "name": "Aktiviert"
             },
-            "useFancyTheme": {
-                "name": "Schicke Suchbox"
-            },
             "matchColor": {
                 "name": "Übereinstimmungsfarbe"
             },

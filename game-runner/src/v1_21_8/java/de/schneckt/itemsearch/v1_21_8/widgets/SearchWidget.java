@@ -50,7 +50,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             super.renderWidget(graphics, mouseX, mouseY, partialTicks);
             return;
         }
@@ -69,7 +69,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public boolean charTyped(char c, int param) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             return super.charTyped(c, param);
         }
         Key key = DefaultKeyMapper.lastPressed();
@@ -78,7 +78,7 @@ public class SearchWidget extends EditBox {
 
     @Override
     public boolean keyPressed(int keyCode, int param1, int param2) {
-        if (this.searchBoxWidget == null || !itemSearch.configuration().getUseFancyTheme().get()) {
+        if (this.searchBoxWidget == null) {
             return super.keyPressed(keyCode, param1, param2);
         }
         Key key = DefaultKeyMapper.lastPressed();
