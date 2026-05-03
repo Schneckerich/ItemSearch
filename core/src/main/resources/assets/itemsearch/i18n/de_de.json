@@ -5,6 +5,9 @@
             "enabled": {
                 "name": "Aktiviert"
             },
+            "onlyColorBackground": {
+                "name": "Subtilere Hervorhebung"
+            },
             "matchColor": {
                 "name": "Übereinstimmungsfarbe"
             },

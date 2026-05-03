@@ -1,0 +1,16 @@
+
+.search-widget{
+    left: var(--pos-x);
+    top: var(--pos-y);
+    alignment-x: left;
+    alignment-y: center;
+}
+
+.clear-button {
+    left: var(--pos-x-clear);
+    top: var(--pos-y-clear);
+    alignment-x: center;
+    alignment-y: center;
+    padding-left: 4;
+    padding-right: 4;
+}

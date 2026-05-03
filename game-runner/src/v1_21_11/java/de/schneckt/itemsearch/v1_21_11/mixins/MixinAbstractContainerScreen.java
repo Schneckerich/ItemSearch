@@ -1,4 +1,4 @@
-package de.schneckt.itemsearch.v1_21_4.mixins;
+package de.schneckt.itemsearch.v1_21_11.mixins;
 
 import de.schneckt.itemsearch.ItemSearch;
 import de.schneckt.itemsearch.event.AbstractContainerScreenInitializedEvent;
@@ -6,9 +6,9 @@ import net.labymod.api.Laby;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(AbstractContainerScreen.class)
+@Mixin(value = AbstractContainerScreen.class)
 public abstract class MixinAbstractContainerScreen extends Screen {
 
     @Shadow
@@ -29,10 +29,10 @@ public abstract class MixinAbstractContainerScreen extends Screen {
     protected int imageHeight;
 
     @Unique
-    private static final ResourceLocation SLOT_HIGHLIGHT_BACK_SPRITE = ResourceLocation.withDefaultNamespace(
+    private static final Identifier SLOT_HIGHLIGHT_BACK_SPRITE = Identifier.withDefaultNamespace(
         "container/slot_highlight_back");
     @Unique
-    private static final ResourceLocation SLOT_HIGHLIGHT_FRONT_SPRITE = ResourceLocation.withDefaultNamespace(
+    private static final Identifier SLOT_HIGHLIGHT_FRONT_SPRITE = Identifier.withDefaultNamespace(
         "container/slot_highlight_front");
 
     protected MixinAbstractContainerScreen(Component title) {
@@ -57,7 +57,7 @@ public abstract class MixinAbstractContainerScreen extends Screen {
 
     // dye the inventory/container slots
     @Inject(method = "renderSlot", at = @At("TAIL"))
-    private void mixinRenderSlot(GuiGraphics guiGraphics, Slot slot, CallbackInfo ci) {
+    private void mixinRenderSlot(GuiGraphics guiGraphics, Slot slot, int $$2, int $$3, CallbackInfo ci) {
         if (!ItemSearch.getInstance().configuration().enabled().get()) return;
         ItemSearch itemSearch = ItemSearch.getInstance();
         if (!itemSearch.configuration().enabled().get()) return;
@@ -74,16 +74,16 @@ public abstract class MixinAbstractContainerScreen extends Screen {
 
         if (!itemSearch.configuration().getSoftHighlight().get()) {
             guiGraphics.blitSprite(
-                RenderType::guiTextured,
-                SLOT_HIGHLIGHT_BACK_SPRITE,
-                slot.x - 4,
-                slot.y - 4,
-                24,
-                24,
-                color);
+            RenderPipelines.GUI_TEXTURED,
+            SLOT_HIGHLIGHT_BACK_SPRITE,
+            slot.x - 4,
+            slot.y - 4,
+            24,
+            24,
+            color);
         }
         guiGraphics.blitSprite(
-            RenderType::guiTexturedOverlay,
+            RenderPipelines.GUI_TEXTURED,
             SLOT_HIGHLIGHT_FRONT_SPRITE,
             slot.x - 4,
             slot.y - 4,
@@ -93,4 +93,3 @@ public abstract class MixinAbstractContainerScreen extends Screen {
 
     }
 }
-

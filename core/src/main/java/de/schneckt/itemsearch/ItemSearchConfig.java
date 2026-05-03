@@ -1,8 +1,6 @@
 package de.schneckt.itemsearch;
 
 import net.labymod.api.addon.AddonConfig;
-import net.labymod.api.client.gui.screen.key.Key;
-import net.labymod.api.client.gui.screen.widget.widgets.input.KeybindWidget.KeyBindSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.SwitchWidget.SwitchSetting;
 import net.labymod.api.client.gui.screen.widget.widgets.input.color.ColorPickerWidget.ColorPickerSetting;
 import net.labymod.api.configuration.loader.annotation.ConfigName;
@@ -15,6 +13,9 @@ public class ItemSearchConfig extends AddonConfig {
     @SwitchSetting
     private final ConfigProperty<Boolean> enabled = new ConfigProperty<>(true);
 
+    @SwitchSetting
+    private final ConfigProperty<Boolean> softHighlight = new ConfigProperty<>(false);
+
     @ColorPickerSetting
     private final ConfigProperty<Color> matchColor = new ConfigProperty<>(Color.WHITE);
 
@@ -25,6 +26,9 @@ public class ItemSearchConfig extends AddonConfig {
     @Override
     public ConfigProperty<Boolean> enabled() { return this.enabled; }
 
+    public ConfigProperty<Boolean> getSoftHighlight() {
+        return softHighlight;
+    }
 
     public ConfigProperty<Color> getMatchColor() {
         return matchColor;

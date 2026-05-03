@@ -8,7 +8,7 @@ plugins {
 val versions = providers.gradleProperty("net.labymod.minecraft-versions").get().split(";")
 
 group = "de.schneckt"
-version = providers.environmentVariable("VERSION").getOrElse("1.0.0")
+version = providers.environmentVariable("VERSION").getOrElse("2.0.0")
 
 labyMod {
     defaultPackageName = "de.schneckt.itemsearch" //change this to your main package name (used by all modules)
@@ -29,7 +29,7 @@ labyMod {
         displayName = "ItemSearch"
         author = "Schneckt"
         description = "Allows you to search faster for items by highlighting them in your inventory, chests and other containers."
-        minecraftVersion = "1.21.3<1.21.8"
+        minecraftVersion = "1.21.3<1.21.11"
         version = rootProject.version.toString()
         releaseChannel = ReleaseChannels.SNAPSHOT
     }

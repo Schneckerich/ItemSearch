@@ -5,6 +5,9 @@
             "enabled": {
                 "name": "Enabled"
             },
+            "softHighlight": {
+                "name": "Reduced highlight intensity"
+            },
             "matchColor": {
                 "name": "Match Color"
             },
